@@ -1,7 +1,6 @@
 //
 //  Created by Manuel Burghard. Licensed unter MIT.
 //
-#if !hasFeature(Embedded)
 import _CJavaScriptKit
 
 /// A protocol that allows a Swift numeric type to be mapped to the JavaScript TypedArray that holds integers of its type
@@ -80,7 +79,7 @@ public class JSTypedArray<Element>: JSBridgedClass, ExpressibleByArrayLiteral wh
     ///   used as the return value for the `withUnsafeBytes(_:)` method. The
     ///   argument is valid only for the duration of the closure's execution.
     /// - Returns: The return value, if any, of the `body` closure parameter.
-    public func withUnsafeBytes<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R {
+    public final func withUnsafeBytes<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R {
         let bytesLength = lengthInBytes
         let rawBuffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: bytesLength)
         defer { rawBuffer.deallocate() }
@@ -111,7 +110,7 @@ public class JSTypedArray<Element>: JSBridgedClass, ExpressibleByArrayLiteral wh
         ///   argument is valid only for the duration of the closure's execution.
         /// - Returns: The return value, if any, of the `body`async closure parameter.
         @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-        public func withUnsafeBytesAsync<R>(_ body: (UnsafeBufferPointer<Element>) async throws -> R) async rethrows -> R {
+        public final func withUnsafeBytesAsync<R>(_ body: (UnsafeBufferPointer<Element>) async throws -> R) async rethrows -> R {
             let bytesLength = lengthInBytes
             let rawBuffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: bytesLength)
             defer { rawBuffer.deallocate() }
@@ -194,4 +193,3 @@ extension Float32: TypedArrayElement {
 extension Float64: TypedArrayElement {
     public static var typedArrayClass: JSFunction { JSObject.global.Float64Array.function! }
 }
-#endif
